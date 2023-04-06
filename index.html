@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style id="compiled-css" type="text/css">
+      #result {
+        display: block;
+        width: 400px;
+        height: 200px;
+      }
+
+      #import {
+        margin: 10px 0;
+      }
+
+      th,
+      td {
+        font-size: 20px;
+        border: 1px solid;
+      }
+      table {
+        width: 20%;
+      }
+    </style>
+
+    <script id="insert"></script>
+  </head>
+  <body>
+    <input type="file" id="selectFiles" value="Import" /><br />
+    <button id="import">Import</button>
+
+    <table id="balance-table">
+      <tr>
+        <th>Serial number</th>
+        <th>Balance</th>
+      </tr>
+    </table>
+
+    <script type="text/javascript">
+      //<![CDATA[
+
+      document.getElementById("import").onclick = function () {
+        let files = document.getElementById("selectFiles").files;
+        console.log(files);
+        if (files.length <= 0) {
+          return false;
+        }
+
+        let fr = new FileReader();
+
+        function createTr(a, b) {
+          let tableRef = document.getElementById("balance-table");
+
+          let newRow = tableRef.insertRow(-1);
+
+          let serialNumberCell = newRow.insertCell();
+          let balanceNumberCell = newRow.insertCell();
+
+          let newSerialNumber = document.createTextNode(a);
+          let newBalance = document.createTextNode(b ? (b / 10 ** 9) + " sui" : null);
+          serialNumberCell.appendChild(newSerialNumber);
+          balanceNumberCell.appendChild(newBalance);
+          return;
+        }
+
+        fr.onload = function (e) {
+          console.log(e);
+          let result = JSON.parse(e.target.result);
+          let table = document.getElementById("balance-table");
+          let balances = result.balances;
+          balances.forEach((balance) =>
+            createTr(balance.serial_number, balance.balance)
+          );
+        };
+
+        fr.readAsText(files.item(0));
+      };
+
+      //]]>
+    </script>
+  </body>
+</html>
