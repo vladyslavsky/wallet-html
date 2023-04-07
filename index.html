@@ -63,7 +63,7 @@
           let balanceNumberCell = newRow.insertCell();
 
           let newSerialNumber = document.createTextNode(a);
-          let newBalance = document.createTextNode((b !== null) ? (b / 10 ** 9) + " sui" : b);
+          let newBalance = document.createTextNode(b);
           serialNumberCell.appendChild(newSerialNumber);
           balanceNumberCell.appendChild(newBalance);
           return;
